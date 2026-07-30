@@ -1,0 +1,346 @@
+/* 管理パネル タブ表示レイアウト（オプトイン、#admin-tabnav-toggle で有効化）。
+   OFF の間は #admin-panel を通常のブロックのまま、.admin-tab-panel を
+   display:contents にして、従来どおり #admin-panel 直下に各セクションが
+   並ぶ見た目・DOM順序を完全に維持する（ゼロ差分）。
+   ON にすると body.admin-tabnav-mode が付与され、ウィンドウ全体を
+   [縦タブ 1 : タブ内容 3 : プレビュー 6] の3カラムに再レイアウトする
+   （docs/admin-panel-layout-compare.html の Layout C 準拠）。
+   #admin-panel は display:contents にして子要素（#admin-tabnav と
+   各 .admin-tab-panel）を body の grid に直接参加させることで実現している。
+   OFF に戻せば #admin-panel が再びブロックに戻り、完全に元のレイアウトへ復帰する。
+   #oes-progress-controls / #oes-match-panel を参照するルールは、それらの
+   要素が存在しないアプリ（公開版Kuawaseなど）では単に何にもマッチしないため
+   無害。 */
+.admin-tabnav {
+    display: none;
+}
+
+.admin-tab-panel {
+    display: contents;
+}
+
+/* モダンテーマのトークン。タブ表示モード限定のスコープなので、OFFの間は
+   一切影響しない。 */
+body.admin-tabnav-mode {
+    --tn-bg: #eef0f4;
+    --tn-panel: #ffffff;
+    --tn-border: #e2e5eb;
+    --tn-text: #20242c;
+    --tn-muted: #6b7280;
+    --tn-accent: #2f5aa8;
+    --tn-accent-fg: #ffffff;
+    --tn-accent-soft: #e8eefb;
+    --tn-danger: #c1272d;
+    --tn-danger-bg: #fdecec;
+    --tn-danger-border: #f3b4b4;
+    --tn-radius: 12px;
+    --tn-radius-sm: 8px;
+    --tn-shadow: 0 1px 2px rgba(20, 24, 33, 0.05), 0 4px 14px rgba(20, 24, 33, 0.06);
+    box-sizing: border-box;
+    grid-template-columns: 1fr 3fr 6fr;
+    /* 行2（試合指定パネル/OES試合読込パネル）は実際に必要な高さだけ(auto)
+       取り、残り全部(1fr)をプレビューに回す。これでプレビューは
+       「16:9にちょうど収まる分だけの小さい箱」ではなく、使える範囲を
+       最大限使った上でレターボックスされる（枠いっぱいに近づく）。 */
+    grid-template-rows: 1fr auto;
+    gap: 12px;
+    padding: 12px;
+    background: var(--tn-bg);
+}
+
+/* プレビューは列3・行1の使える領域いっぱいに広がる（grid既定のstretch）。
+   下段（行2、auto）は試合指定パネル/OES試合読込パネル用に必要な分だけ
+   使う（元のレイアウトでもプレビュー直下にこれらのパネルが来ていたのと
+   同じ位置関係）。将来的に別の用途に差し替える可能性あり。 */
+body.admin-tabnav-mode #slide-preview {
+    grid-column: 3 / 4;
+    grid-row: 1 / 2;
+    position: relative;
+    overflow: hidden;
+    background: var(--tn-panel);
+    border: 1px solid var(--tn-border);
+    border-radius: var(--tn-radius);
+    box-shadow: var(--tn-shadow);
+    container-type: size;
+}
+
+/* iframeの内部ビューポートは常にアプリの基準解像度に固定し、CSS transform
+   で見た目のサイズだけを表示領域に合わせて拡縮する。
+   幅・高さの一方だけを変えて縮小すると、iframe内のコンテンツが
+   実際にリフロー（再レイアウト）してしまい見た目が変わってしまうため、
+   ビューポート自体は固定したまま、投影ウィンドウのズーム処理
+   （scaleW/scaleHのうち小さい方を採用）と同じ考え方でスケールする。
+   #slide-preview は使える領域いっぱいに広がる箱なので、その領域の形が
+   基準解像度の縦横比に近いほど隙間なく表示される（縦横比が完全に一致
+   しない場合のみ、片側にわずかな余白が残る）。 */
+body.admin-tabnav-mode #slide-frame {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: var(--tn-preview-w, 1920px);
+    height: var(--tn-preview-h, 1080px);
+    /* 基本ルール（非タブモード用）の max-width/max-height:100% と margin:auto
+       を打ち消す。放置すると、位置基準祖先(#slide-preview)のサイズで
+       先にクランプされてから transform:scale() が乗るため、二重に縮小
+       されてしまう（実際に発生していた不具合）。 */
+    max-width: none;
+    max-height: none;
+    margin: 0;
+    border: none;
+    border-radius: calc(var(--tn-radius) - 2px);
+    transform-origin: center center;
+    transform: translate(-50%, -50%) scale(min(calc(100cqw / var(--tn-preview-w, 1920px)), calc(100cqh / var(--tn-preview-h, 1080px))));
+}
+
+body.admin-tabnav-mode #admin-panel {
+    display: contents;
+}
+
+body.admin-tabnav-mode #admin-tabnav {
+    display: flex;
+    flex-direction: column;
+    grid-column: 1 / 2;
+    grid-row: 1 / 3;
+    gap: 6px;
+    background: var(--tn-panel);
+    border: 1px solid var(--tn-border);
+    border-radius: var(--tn-radius);
+    box-shadow: var(--tn-shadow);
+    padding: 10px 6px;
+    overflow-y: auto;
+}
+
+body.admin-tabnav-mode .admin-tab-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    background: transparent;
+    color: var(--tn-muted);
+    border: none;
+    border-radius: var(--tn-radius-sm);
+    padding: 12px 4px;
+    font-size: 0.72em;
+    line-height: 1.4;
+    font-weight: 600;
+    text-align: center;
+    white-space: normal;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease;
+}
+
+body.admin-tabnav-mode .admin-tab-btn:hover {
+    background: var(--tn-accent-soft);
+    color: var(--tn-text);
+}
+
+body.admin-tabnav-mode .admin-tab-btn:focus-visible {
+    outline: 2px solid var(--tn-accent);
+    outline-offset: 2px;
+}
+
+body.admin-tabnav-mode .admin-tab-btn.active {
+    background: var(--tn-accent);
+    color: var(--tn-accent-fg);
+}
+
+body.admin-tabnav-mode .admin-tab-panel {
+    display: none;
+    grid-column: 2 / 3;
+    grid-row: 1 / 3;
+    background: var(--tn-panel);
+    border: 1px solid var(--tn-border);
+    border-radius: var(--tn-radius);
+    box-shadow: var(--tn-shadow);
+    padding: 14px;
+    overflow-y: auto;
+    color: var(--tn-text);
+}
+
+body.admin-tabnav-mode .admin-tab-panel.active {
+    display: block;
+}
+
+/* 試合指定パネル・OES試合読込パネルはプレビュー列の下段(20%)に固定表示
+   （元のレイアウトでもプレビュー直下に位置していたのと同じ配置）。
+   将来的に別の用途に差し替える可能性あり。 */
+body.admin-tabnav-mode #match-setup-panel,
+body.admin-tabnav-mode #oes-match-panel {
+    grid-column: 3 / 4;
+    grid-row: 2 / 3;
+    margin: 0;
+    max-height: none;
+    background: var(--tn-panel);
+    border: 1px solid var(--tn-border);
+    border-radius: var(--tn-radius);
+    box-shadow: var(--tn-shadow);
+}
+
+body.admin-tabnav-mode .match-setup-panel-row {
+    flex-wrap: wrap;
+}
+
+body.admin-tabnav-mode #match-setup-panel h3,
+body.admin-tabnav-mode #oes-match-panel h3 {
+    font-size: 0.78em;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: var(--tn-muted);
+}
+
+/* 見出し類（対戦切り替え・BGM再生などの div 見出しと details の summary） */
+body.admin-tabnav-mode #admin-panel .section-heading {
+    font-size: 0.78em;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: var(--tn-muted);
+    margin: 16px 0 8px;
+}
+
+body.admin-tabnav-mode #admin-panel .section-heading:first-child {
+    margin-top: 0;
+}
+
+body.admin-tabnav-mode #admin-panel details {
+    background: #f7f8fa;
+    border: 1px solid var(--tn-border);
+    border-radius: var(--tn-radius-sm);
+    padding: 10px 12px;
+    margin: 0 0 10px;
+}
+
+body.admin-tabnav-mode #admin-panel details:last-child {
+    margin-bottom: 0;
+}
+
+body.admin-tabnav-mode #admin-panel summary {
+    font-size: 0.78em;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: var(--tn-muted);
+    list-style: none;
+}
+
+body.admin-tabnav-mode #admin-panel summary::-webkit-details-marker {
+    display: none;
+}
+
+body.admin-tabnav-mode #admin-panel summary::after {
+    content: "▾";
+    float: right;
+    color: var(--tn-muted);
+    transition: transform 0.15s ease;
+}
+
+body.admin-tabnav-mode #admin-panel details[open] summary::after {
+    transform: rotate(180deg);
+}
+
+/* 対戦切り替え・披講・BGM再生・OES進行・ファイル管理などの内側ブロック
+   （タブ内容カードの中にネストされるので、シャドウは付けずフラットに） */
+body.admin-tabnav-mode #admin-panel #page-controls,
+body.admin-tabnav-mode #admin-panel #hikou,
+body.admin-tabnav-mode #admin-panel #audio-controls,
+body.admin-tabnav-mode #admin-panel #oes-progress-controls,
+body.admin-tabnav-mode #admin-panel .file-manager {
+    background: #f7f8fa;
+    border: 1px solid var(--tn-border);
+    border-radius: var(--tn-radius-sm);
+    box-shadow: none;
+}
+
+body.admin-tabnav-mode .timer-block {
+    border-color: var(--tn-border);
+    border-radius: var(--tn-radius-sm);
+    box-shadow: none;
+}
+
+body.admin-tabnav-mode #admin-panel label,
+body.admin-tabnav-mode #match-setup-panel label,
+body.admin-tabnav-mode #oes-match-panel label {
+    color: var(--tn-text);
+}
+
+/* ボタン類（危険操作・特別ボタンは既存の色指定がこれより高詳細度で優先される） */
+body.admin-tabnav-mode #admin-panel button,
+body.admin-tabnav-mode #admin-panel .btn,
+body.admin-tabnav-mode #match-setup-panel button,
+body.admin-tabnav-mode #oes-match-panel button {
+    background: var(--tn-panel);
+    color: var(--tn-text);
+    border: 1px solid var(--tn-border);
+    border-radius: var(--tn-radius-sm);
+    padding: 6px 12px;
+    font-size: 0.85em;
+    font-weight: 600;
+    box-shadow: 0 1px 1px rgba(20, 24, 33, 0.03);
+    transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+body.admin-tabnav-mode #admin-panel button:hover,
+body.admin-tabnav-mode #admin-panel .btn:hover,
+body.admin-tabnav-mode #match-setup-panel button:hover,
+body.admin-tabnav-mode #oes-match-panel button:hover {
+    background: var(--tn-accent-soft);
+    border-color: var(--tn-accent);
+    color: var(--tn-accent);
+}
+
+body.admin-tabnav-mode #admin-panel button:focus-visible,
+body.admin-tabnav-mode #match-setup-panel button:focus-visible,
+body.admin-tabnav-mode #oes-match-panel button:focus-visible {
+    outline: 2px solid var(--tn-accent);
+    outline-offset: 1px;
+}
+
+/* 危険操作ボタン（句データリセット・BGM一括削除・全データ初期化・BGM停止） */
+body.admin-tabnav-mode .file-manager #reset-data-btn,
+body.admin-tabnav-mode .file-manager #delete-all-music-btn,
+body.admin-tabnav-mode .file-manager #reset-excel-only-btn,
+body.admin-tabnav-mode #audio-controls #stop-bgm-btn {
+    background: var(--tn-danger-bg);
+    color: var(--tn-danger);
+    border: 1px solid var(--tn-danger-border);
+}
+
+body.admin-tabnav-mode .file-manager #reset-data-btn:hover,
+body.admin-tabnav-mode .file-manager #delete-all-music-btn:hover,
+body.admin-tabnav-mode .file-manager #reset-excel-only-btn:hover,
+body.admin-tabnav-mode #audio-controls #stop-bgm-btn:hover {
+    background: #fbd9d9;
+}
+
+/* 入力欄・セレクト */
+body.admin-tabnav-mode #admin-panel select,
+body.admin-tabnav-mode #admin-panel input[type="text"],
+body.admin-tabnav-mode #admin-panel input[type="password"],
+body.admin-tabnav-mode #admin-panel input[type="number"],
+body.admin-tabnav-mode #match-setup-panel select,
+body.admin-tabnav-mode #match-setup-panel input[type="text"],
+body.admin-tabnav-mode #oes-match-panel select {
+    background: var(--tn-panel);
+    color: var(--tn-text);
+    border: 1px solid var(--tn-border);
+    border-radius: var(--tn-radius-sm);
+    padding: 5px 8px;
+}
+
+body.admin-tabnav-mode #admin-panel select:focus,
+body.admin-tabnav-mode #admin-panel input:focus,
+body.admin-tabnav-mode #match-setup-panel select:focus,
+body.admin-tabnav-mode #match-setup-panel input:focus,
+body.admin-tabnav-mode #oes-match-panel select:focus {
+    outline: none;
+    border-color: var(--tn-accent);
+    box-shadow: 0 0 0 3px var(--tn-accent-soft);
+}
+
+body.admin-tabnav-mode input[type="checkbox"] {
+    width: 1.5em;
+    height: 1.5em;
+    vertical-align: middle;
+    accent-color: var(--primary);
+}

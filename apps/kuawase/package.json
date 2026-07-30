@@ -1,0 +1,32 @@
+{
+  "name": "@kuawase/app-kuawase",
+  "private": true,
+  "version": "0.14.1",
+  "description": "Workspace app shell for Kuawase.",
+  "author": "BlackStraySheep",
+  "type": "commonjs",
+  "main": "src/main.js",
+  "config": {
+    "forge": "forge.config.js"
+  },
+  "scripts": {
+    "start": "chcp 65001 && electron-forge start",
+    "package": "electron-forge package",
+    "make": "electron-forge make",
+    "publish": "electron-forge publish",
+    "check:entry": "node ../../tools/check-app-entry.js apps/kuawase",
+    "print:product": "node scripts/print-product.js",
+    "prototype": "powershell -ExecutionPolicy Bypass -File ../../tools/run-prototype.ps1 kuawase"
+  },
+  "dependencies": {
+    "@electron/remote": "^2.1.2",
+    "@kuawase/core": "0.1.0",
+    "axios": "^1.13.5",
+    "electron-log": "^5.4.0",
+    "electron-updater": "^6.6.2",
+    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.2/xlsx-0.20.2.tgz"
+  },
+  "devDependencies": {
+    "electron": "^40.10.1"
+  }
+}

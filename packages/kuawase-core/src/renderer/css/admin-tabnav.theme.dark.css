@@ -1,0 +1,32 @@
+/* 管理パネル タブ表示レイアウトのダークテーマ。
+   admin-tabnav.css 側の --tn-* トークンをここで上書きするだけで、
+   タブ/カード/ボタン/フォームなど全ての関連ルールに反映される。 */
+body.home-dark.admin-tabnav-mode {
+  --tn-bg: #17181c;
+  --tn-panel: #202127;
+  --tn-border: #33343c;
+  --tn-text: #eceef2;
+  --tn-muted: #9aa0ab;
+  --tn-accent: #6c93e0;
+  --tn-accent-fg: #0d1526;
+  --tn-accent-soft: #223050;
+  --tn-danger: #ff9d9d;
+  --tn-danger-bg: #402226;
+  --tn-danger-border: #663333;
+}
+
+body.home-dark.admin-tabnav-mode #admin-panel details,
+body.home-dark.admin-tabnav-mode #admin-panel #page-controls,
+body.home-dark.admin-tabnav-mode #admin-panel #hikou,
+body.home-dark.admin-tabnav-mode #admin-panel #audio-controls,
+body.home-dark.admin-tabnav-mode #admin-panel #oes-progress-controls,
+body.home-dark.admin-tabnav-mode #admin-panel .file-manager {
+  background: #1a1b20;
+}
+
+body.home-dark.admin-tabnav-mode .file-manager #reset-data-btn:hover,
+body.home-dark.admin-tabnav-mode .file-manager #delete-all-music-btn:hover,
+body.home-dark.admin-tabnav-mode .file-manager #reset-excel-only-btn:hover,
+body.home-dark.admin-tabnav-mode #audio-controls #stop-bgm-btn:hover {
+  background: #533;
+}

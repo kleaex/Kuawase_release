@@ -1,0 +1,60 @@
+/* font-size 140.625% = min(1920/1024, 1080/768): this file's text sizing is
+   em-based off :root's font-size, which is an absolute px anchor — unlike the
+   surrounding vh/%-based layout, it doesn't grow with the window. The shared
+   projector base resolution is 1920x1080 (see kuawase-core/electron-main's
+   windows.js baseWidth/baseHeight default), up from the legacy 1024x768 this
+   value was originally tuned for, so it's scaled by the same ratio the
+   projector zoom factor uses. */
+:root { --primary:#e0e0e0; --primary-light:#f5f5f5; --team-slot-width:40%; font-size:140.625%; }
+html, body { height:100%; }
+/* khb-custom-top: ユーザー投入の大会トップHTML表示時はアプリ既定の装飾を無効化し、
+   ブラウザで直接開いた場合に近い素の見た目にする（見え方の乖離対策）。 */
+html:not(.khb-custom-top) body { margin:0; color:#000; background:#fff; font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN",sans-serif; }
+#top { margin-top:.5rem; }
+
+html:not(.khb-custom-top) h1 { font-weight:600; font-size:1.7em; color:#000; padding:.2rem 0 .2rem .5rem; margin:0 0 .5rem 0; background-image:linear-gradient(var(--primary),var(--primary-light)); }
+html:not(.khb-custom-top) h2 { font-weight:600; font-size:1.7em; color:#000; margin:0; padding:.5rem 0; }
+html:not(.khb-custom-top) h3 { font-weight:500; font-size:3em; margin:auto; padding:1rem 0 1rem; }
+html:not(.khb-custom-top) h4 { font-size:1.2em; margin:0; padding:.2rem 0; }
+
+.compe-title { position:relative; }
+.compe-title #Compe-name { padding-left:.2rem; display:inline-block; }
+.compe-title .compe-logo-wrap { position:absolute; right:.6rem; top:50%; transform:translateY(-50%); display:flex; align-items:center; gap:.5rem; opacity:.25; pointer-events:none; }
+.compe-title .compe-logo-stack { display:flex; flex-direction:column; align-items:flex-end; gap:.1em; }
+.compe-title .compe-logo-powered { font-size:.45em; letter-spacing:.08em; font-family:"CMU Serif",serif; margin-top:.25em; }
+.compe-title .compe-logo { font-family:"CMU Serif",serif; font-weight:700; line-height:1; font-size:.69em; }
+
+/* =============================
+   新レイアウトクラス構造
+   ============================= */
+.battle-layout { display:flex; justify-content:space-between; align-items:stretch; gap:1rem; height:calc(100vh - 4rem); box-sizing:border-box; padding:0 .5rem .5rem; }
+.poem-panel { display:flex; flex-direction:column; text-align:center; width:30%; box-sizing:border-box; border:2px solid #000; background:#fff; overflow:hidden; }
+.poem-panel--red { background:#ffccff; }
+.poem-panel--white { background:#ffffff; }
+.match-panel { display:flex; flex-direction:column; text-align:center; width:40%; box-sizing:border-box; background:#fff; padding:0 .5rem; overflow:hidden; min-height:0; }
+.team-slots { display:flex; justify-content:space-between; gap:1rem; margin-top:auto; min-height:0; flex-shrink:1; }
+.team-slot { flex:0 0 var(--team-slot-width); max-width:var(--team-slot-width); padding:1rem 0; text-align:center; box-sizing:border-box; background:#fff; border:2px solid #000; display:flex; align-items:center; justify-content:center; overflow:hidden; min-height:0; }
+.team-slot--red { background:#ffccff; }
+.team-name { font-weight:700; font-size:1.5em; writing-mode:vertical-rl; text-align:left; display:inline-block; height:35vh; min-height:8rem; overflow:hidden; }
+
+/* 小さい画面でのみ高さを調整 */
+@media (max-height: 600px) {
+  .team-name { height:25vh; max-height:25vh; }
+}
+@media (max-height: 500px) {
+  .team-name { height:20vh; max-height:20vh; }
+}
+.haiku-container { flex:1 1 auto; display:flex; flex-direction:column; justify-content:flex-start; align-items:center; min-height:0; }
+.haiku-text { font-weight:700; font-size:2.3em; writing-mode:vertical-rl; display:inline-block; text-align:start; padding-inline:.15em; box-sizing:content-box; overflow:visible; }
+
+/* 句フェードアニメ */
+.fade-in { clip-path:inset(0 0 100% 0); animation:fadeSlideDown 1.2s cubic-bezier(.4,0,.4,.5) forwards; }
+@keyframes fadeSlideDown { from { clip-path:inset(0 0 100% 0);} to { clip-path:inset(0 0 0 0);} }
+
+/* 縦中横/縦書き補助 */
+.tcy { text-combine-upright:all; }
+.auto-vertical { writing-mode:vertical-rl; text-orientation:mixed; white-space:nowrap; display:inline-block; transform-origin:top right; overflow:visible; will-change:letter-spacing,transform; }
+
+/* Hide Admin View Layout by default in normal views */
+#admin-view-layout { display:none; }
+

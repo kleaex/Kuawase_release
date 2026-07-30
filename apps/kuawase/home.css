@@ -1,0 +1,778 @@
+@import url("../../packages/kuawase-core/src/renderer/css/admin-tabnav.css");
+
+:root {
+    --grey: #333;
+    --white: #fff;
+    --primary: #e0e0e0;
+    --primary-dark: #bdbdbd;
+    --primary-light: #f5f5f5;
+}
+body {
+    display: grid;
+    grid-template-columns: 70% 29%;
+    grid-template-rows: 79% 20%;
+    height: 100vh;
+    margin: 0;
+    gap: 5px;
+    font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", sans-serif;
+}
+
+button, select, input{
+    font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", sans-serif;
+}
+
+#slide-preview {
+    grid-column: 1 / 2;
+    grid-row: 1 / 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background-color: #f0f0f0;
+    border: 1px solid var(--grey);
+}
+
+#slide-frame {
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    max-height: 100%;
+    border: 1px solid var(--grey);
+    box-sizing: border-box;
+    transform-origin: center;
+        /* スケーリング時の余白調整 */
+    margin: auto;
+    display: block;
+}
+
+#admin-panel {
+    grid-column: 2 / 3;
+    grid-row: 1 / 3;
+    background: #f0f0f0;
+    padding: 10px;
+    overflow-y: auto;
+    border-left: 3px solid #b0b0b0;
+}
+
+#admin-panel button,
+#admin-panel .btn {
+    background: var(--primary);
+    color: var(--grey);
+    border: 1px solid var(--grey);
+    border-radius: 3px;
+    padding: 4px 4px;
+    margin: 0;
+    font-size: 0.9em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+}
+#admin-panel button:hover,
+#admin-panel .btn:hover {
+    background: var(--primary-dark);
+    color: #000;
+}
+
+/* 特別ボタン */
+#admin-panel #showRed {
+    background: #ffccff;
+}
+#admin-panel #showRed:hover {
+    background: #ff77ff;
+}
+#admin-panel #showWhite {
+    background: #e5e5e5;
+}
+#admin-panel #showWhite:hover {
+    background: #9b9b9b;
+}
+
+#admin-panel .btn-pair {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 6px;
+}
+
+#timer-panel {
+    grid-column: 1 / 2;
+    grid-row: 2 / 3;
+    background: #999;
+    padding: 10px;
+    text-align: center;
+}
+
+/* --- 試合設定パネル --- */
+#match-setup-panel {
+    background: #f8f9fb;
+    border: 2px solid #b0b0b0;
+    border-radius: 8px;
+    margin-top: 9px;
+    padding: 14px 16px 10px 16px;
+    box-shadow: 0 2px 8px rgba(180,180,180,0.08);
+    max-width: 98%;
+    max-height: 340px;
+    overflow-y: auto;
+    font-size: 0.9em;
+}
+#match-setup-panel h3 {
+    margin: 0 0 10px;
+    font-size: 1em;
+    color: var(--grey);
+    letter-spacing: 0.05em;
+}
+.match-setup-panel-row {
+    display: flex;
+    gap: 18px;
+    margin-bottom: 10px;
+    align-items: flex-end;
+}
+.match-setup-panel-row label {
+    flex: 1 1 0;
+    margin-bottom: 0;
+}
+#match-setup-panel label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+    margin-bottom: 0;
+}
+#match-setup-panel label span {
+    white-space: nowrap; /* 試合指定パネルのラベル名を改行させない */
+}
+#match-setup-panel select,
+#match-setup-panel input[type="text"] {
+    flex: 1 1 0;
+    padding: 4px 4px;
+    border: 1px solid #bbb;
+    border-radius: 4px;
+    font-size: 0.9em;
+    background: #fff;
+    margin-left: 6px;
+}
+#match-setup-panel select {
+    width: 100%;          /* ラベル内の残り幅いっぱいに */
+    min-width: 120px;         /* Flex収縮を許可（固定幅化防止） */
+    box-sizing: border-box;
+}
+#match-setup-panel button {
+    background: var(--primary);
+    color: var(--grey);
+    border: 1px solid var(--grey);
+    border-radius: 4px;
+    padding: 5px 14px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+}
+#match-setup-panel button:hover {
+    background: var(--primary-dark);
+    color: #000;
+}
+
+/* --- 管理パネル --- */
+.file-manager {
+    margin: 10px 0;
+    padding: 14px 14px 10px 14px;
+    background: #fafdff;
+    border: 1.5px solid #d0d0d0;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(120,180,255,0.08);
+    font-size: 0.9em;
+}
+.file-manager label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.9em;
+    font-weight: 500;
+    justify-content: space-between;
+}
+.file-manager.settings-block > div { margin-top:8px; }
+.file-manager.settings-block > div:first-child { margin-top:0; }
+.file-manager.settings-block label { padding:4px 0 2px; }
+.file-manager input[type="file"] {
+    font-size: 0.9em;
+    padding: 2px 0;
+}
+.file-manager select {
+    max-width: 280px;
+    min-width: 10px;
+    padding: 2px 6px;
+    border: 1px solid #bbb;
+    border-radius: 4px;
+    font-size: 0.9em;
+    background: #fff;
+    margin-left: 2px;
+}
+.file-manager button {
+    background: var(--primary);
+    border: 1px solid var(--grey);
+    border-radius: 4px;
+    padding: 3px 12px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    margin: 0 2px 0 6px;
+    cursor: pointer;
+    transition: background 0.18s, color 0.18s;
+}
+.file-manager button:hover {
+    background: var(--primary-dark);
+    color: #000;
+}
+/* BGM設定行をフレックスで右端に保存ボタン */
+/* 旧: 横並び .bgm-selects-row は廃止（残しても未使用） */
+.bgm-selects-row { align-items: flex-end; gap: 10px; }
+.bgm-selects-row label { flex: 1 1 140px; min-width: 120px; }
+/* 新: 1行1つのBGMセレクタ */
+.bgm-selects-vertical { display:flex; flex-direction:column; gap:4px; }
+.bgm-selects-vertical label { display:flex; align-items:center; gap:6px; }
+.bgm-selects-vertical label span { min-width:80px; }
+.bgm-selects-vertical select { flex:1 1 auto; }
+.bgm-save-row { display:flex; justify-content:flex-end; margin-top:6px; }
+.file-manager .css-select-line {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: nowrap;
+}
+.file-manager .css-select-line select { flex: 1 1 auto; max-width: none; }
+#add-custom-css-btn {
+    white-space: nowrap;
+    flex: 0 0 auto;
+}
+.css-theme-label { display:block; margin-bottom:4px; font-weight:600; }
+.file-manager #note {
+    padding: 2px 0 0 0;
+    margin: 0;
+    color: #000;
+    font-size: 0.9rem;
+}
+
+/* BGMファイル管理ラベルの改行防止 */
+.file-manager label span[data-lang^="bgm-up-"] {
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+.file-list-wrapper {
+    margin: 8px 0 8px 0;
+}
+#music-file-list {
+    margin: 0;
+    list-style: none;
+    padding: 0 0 0 2px;
+    max-height: 150px;
+    overflow-y: auto;
+}
+#music-file-list li {
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #e7e7e7;
+    border-radius: 5px;
+    padding: 2px 8px 2px 6px;
+    font-size: 0.8rem;
+    gap: 10px; /* 追加: ボタンとファイル名の間隔を一定に */
+}
+.music-file-name {
+    display: block;
+    max-width: 360px; /* 必要に応じて調整 */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+#music-file-list button, #user-css-file-list button {
+    margin-left: 8px;
+    padding: 2px 4px;
+    background: #ffd6d6;
+    color: #b22;
+    border: 1.5px solid #b22;
+    border-radius: 3px;
+    transition: background 0.18s;
+    flex-shrink: 0;
+}
+#music-file-list button:hover {
+    background: #ff8a8a;
+    color: #fff;
+}
+
+/* --- User CSS file list (match BGM style) --- */
+#user-css-file-list {
+    list-style: none;
+    padding: 0 0 0 2px;
+    margin: 4px 0 0 0;
+    max-height: 150px;
+    overflow-y: auto;
+}
+#user-css-file-list li {
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #e7e7e7;
+    border-radius: 5px;
+    padding: 2px 8px 2px 6px;
+    font-size: 0.8rem;
+    gap: 10px;
+}
+.user-css-file-name {
+    display: block;
+    max-width: 260px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+#user-css-file-list button:hover {
+    background: #ff8a8a;
+    color: #fff;
+}
+
+/* --- タイマーコンテナ --- */
+.timers-container {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    justify-content: flex-start;
+    align-items: flex-start;
+    margin-top: 8px;
+}
+.timer-block {
+    background: #fff;
+    border: 1.5px solid #d0d0d0;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(80,120,200,0.06);
+    padding: 10px 18px;
+    min-width: 120px;
+    max-width: 320px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: background 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+.timer-block > div:not(:last-child) {
+    margin-bottom: 6px;
+}
+.timer-block input[type="number"] {
+    width: 38px;
+    padding: 2px 4px;
+    font-size: 1em;
+    border: 1px solid #bbb;
+    border-radius: 5px;
+    margin-right: 2px;
+    background: #f7f7fa;
+    text-align: center;
+}
+.timer-block button {
+    background: var(--primary);
+    border: 1px solid var(--grey);
+    border-radius: 4px;
+    padding: 2px 14px;
+    font-size: 0.9em;
+    font-weight: 500;
+    margin: 0 2px;
+    cursor: pointer;
+    transition: background 0.18s, color 0.18s;
+    min-width: 70px;
+    box-sizing: border-box;
+}
+.timer-block button:hover {
+    background: var(--primary-dark);
+    color: #000;
+}
+
+#timer, #timer2 {
+    font-size: 1.5em;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: #2a2a2a;
+    background: #f6faff;
+    border-radius: 7px;
+    padding: 2px 10px;
+    box-shadow: 0 1px 4px rgba(120,180,255,0.07);
+    min-width: 120px;
+    text-align: center;
+    margin-bottom: 2px;
+    transition: background 0.2s ease;
+}
+
+/* タイマーが0になったときの薄赤背景（ブロック全体） */
+.timer-block.timer-expired {
+    background: #ffeaea;
+    border-color: #f0bcbc;
+    box-shadow: 0 2px 10px rgba(255, 0, 0, 0.10);
+}
+
+/* パネル未保存時の薄赤ハイライト（共通） */
+.panel-unsaved {
+    background: #ffeaea !important;
+    border: 1.5px solid #f0bcbc !important;
+    box-shadow: 0 2px 10px rgba(255, 0, 0, 0.10) !important;
+    transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+#one-minute-warning {
+    color: #e74c3c;
+    font-size: 2em;
+    font-weight: bold;
+    margin-top: 2px;
+    min-height: 1.2em;
+}
+
+.unit{
+    font-size: 0.7em;
+}
+
+details {
+    border-radius: 4px;
+    padding: 0.5em 0 0;
+  }
+
+details[open] {
+    padding: 0.5em 0 0.5em;
+}
+
+summary,
+.section-heading {
+    font-size: 1em;
+    font-weight: 600;
+    color: #2a2a2a;
+}
+
+summary {
+    cursor: pointer;
+}
+
+/* --- 対戦切り替え・披講ボタン・BGM再生（調整） --- */
+#page-controls {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: flex-start;
+    align-items: center;
+    background: #fafdff;
+    border: 1.5px solid #d0d0d0;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(120,180,255,0.08);
+    padding: 8px;
+    margin-bottom: 14px;
+    font-size: 0.9em;
+}
+#page-controls button {
+    width: 60px;
+    margin: 2px 0;
+    display: inline-block;
+    background: var(--primary);
+    color: var(--grey);
+    border: 1px solid var(--grey);
+    border-radius: 3px;
+    padding: 4px 4px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(200,200,100,0.08);
+    transition: background 0.2s, color 0.2s;
+}
+#page-controls button:hover {
+    background: var(--primary-dark);
+    color: #000;
+}
+
+#hikou {
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 10px;
+    background: #fafdff;
+    border: 1.5px solid #d0d0d0;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(120,180,255,0.08);
+    padding: 8px;
+    margin-bottom: 14px;
+}
+#hikou button {
+    width: 100px;
+    margin: 0 8px 0 0;
+}
+
+.file-manager #reset-data-btn,
+.file-manager #delete-all-music-btn,
+.file-manager #reset-excel-only-btn {
+    background: #ffd6d6;
+    color: #b22;
+    border: 1.5px solid #b22;
+    border-radius: 4px;
+    font-size: 0.9em;
+    font-weight: 500;
+    margin: 0 2px 0 6px;
+    cursor: pointer;
+    transition: background 0.18s, color 0.18s;
+    padding: 3px 12px;
+}
+.file-manager #reset-data-btn:hover,
+.file-manager #delete-all-music-btn:hover,
+.file-manager #reset-excel-only-btn:hover {
+    background: #ff8a8a;
+    color: #fff;
+}
+
+/* --- 共通: 非表示 --- */
+.hide {
+    display: none !important;
+}
+
+/* --- 共通: Excel/BGMファイル名表示用 --- */
+.last-excel-file {
+    margin-left: 10px;
+    color: #555;
+    font-size: 0.9em;
+    white-space: normal; /* 折り返しを許可 */
+    overflow-wrap: break-word; /* 長い単語やURLを強制的に改行 */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex-grow: 1;
+    min-width: 0;
+}
+
+/* --- 一括削除ボタンを初期化ボタンと同じデザインに --- */
+#delete-all-music-btn {
+    background: #ffd6d6;
+    color: #b22;
+    border: 1.5px solid #b22;
+    border-radius: 4px;
+    font-size: 0.9em;
+    font-weight: 500;
+    margin: 0 2px 0 6px;
+    cursor: pointer;
+    transition: background 0.18s, color 0.18s;
+    padding: 3px 12px;
+}
+#delete-all-music-btn:hover {
+    background: #ff8a8a;
+    color: #fff;
+}
+
+#audio-controls {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: nowrap; /* 横並びで折り返さない */
+    background: #fafdff;
+    border: 1.5px solid #d0d0d0;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(120,180,255,0.08);
+    padding: 8px;
+    margin-bottom: 14px;
+    gap: 6px; /* 各要素間の余白をgapで管理 */
+}
+#audio-controls .btn,
+#audio-controls button {
+    width: 60px;
+    background: var(--primary);
+    color: var(--grey);
+    border: 1px solid var(--grey);
+    border-radius: 3px;
+    padding: 4px 4px;
+    font-size: 0.9em;
+    font-weight: bold;           /* フォントウエイトをboldに */
+    cursor: pointer;
+    transition: background 0.18s, color 0.18s;
+    box-sizing: border-box;
+    text-align: center;          /* 文字を中央揃えに */
+    display: flex;               /* flexで中央揃え */
+    align-items: center;
+    justify-content: center;
+}
+#audio-controls .btn:hover,
+#audio-controls button:hover {
+    background: var(--primary-dark);
+    color: #000;
+}
+/* BGM停止ボタンだけ色を変更 */
+#audio-controls #stop-bgm-btn {
+    background: #ffd6d6;
+    color: #b22;
+    border: 1.5px solid #b22;
+}
+#audio-controls #stop-bgm-btn:hover {
+    background: #ff8a8a;
+    color: #fff;
+}
+#toggle-wait-loop-checkbox,
+#home-darkmode-toggle,
+#admin-tabnav-toggle {
+    width: 1.5em;
+    height: 1.5em;
+    vertical-align: middle;
+}
+#audio-controls label {
+    font-size: 0.85em;
+    cursor: pointer;
+    user-select: none;
+}
+
+
+.match-setup-flex {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.match-setup-fields {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    gap: 0;
+}
+
+#saveMatchConfig {
+    align-self: center;
+    margin-left: 24px;
+    white-space: nowrap;
+}
+#toast{
+    display:none;
+    position:fixed;
+    top:30px;
+    left:50%;
+    transform:translateX(-50%);
+    background:var(--grey);
+    color:#fff;
+    padding:12px 32px;
+    border-radius:8px;
+    z-index:9999;
+    font-size:1.1em;
+    box-shadow:0 2px 8px rgba(0,0,0,0.15);
+}
+
+.flex-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+.right-buttons {
+    margin-left: auto;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+/* --- GSSモーダルウィンドウ --- */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.5);
+}
+.modal-content {
+    background-color: #fefefe;
+    margin: 10% auto;
+    padding: 25px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 600px;
+    border-radius: 8px;
+    position: relative;
+}
+.close-btn {
+    color: #aaa;
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+.close-btn:hover,
+.close-btn:focus {
+    color: black;
+    text-decoration: none;
+}
+.modal-content .url-input {
+    width: 100%;
+}
+.modal-content button {
+    margin-left: 10px;
+    padding: 8px 15px;
+}
+
+/* --- 確認モーダルウィンドウ --- */
+.confirm-modal-content {
+  background: #222;
+  color: #eee;
+  border: 1px solid #444;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.6);
+}
+.confirm-modal-content h3 { margin-top:0; font-size:18px; }
+.confirm-modal-content p { line-height:1.5; margin: 12px 0 4px; }
+.confirm-actions { display:flex; gap:10px; margin-top:18px; }
+.confirm-actions button { flex:1; margin-left:0; background:#444; color:#eee; border:1px solid #666; border-radius:4px; }
+.confirm-actions button:hover { background:#555; }
+.confirm-actions #confirm-ok-btn { background:#2d6cdf; border-color:#2d6cdf; }
+.confirm-actions #confirm-ok-btn:hover { background:#3979ec; }
+.confirm-actions #confirm-cancel-btn { background:#555; }
+.confirm-actions #confirm-cancel-btn:hover { background:#666; }
+
+.app-modal-content {
+  background:#222;
+  color:#eee;
+  border:1px solid #444;
+  box-shadow:0 4px 18px rgba(0,0,0,0.6);
+  border-radius:8px;
+}
+.app-modal-content h3 { margin-top:0; font-size:18px; }
+.app-modal-content p { line-height:1.5; }
+.app-modal-content button { background:#2d6cdf; color:#fff; border-radius:4px; }
+.app-modal-content button:hover { background:#3979ec; }
+.app-modal-content .close-btn { color:#bbb; }
+.app-modal-content .close-btn:hover { color:#fff; }
+
+/* GSS読み込みモーダルの入力行 */
+.gs-input-row {
+    margin-top: 15px;
+    justify-content: space-between;
+}
+
+.gs-url-input-flex {
+    flex: 1;
+    margin-right: 10px;
+}
+
+/* 句データ管理の現在のファイル表示行 */
+.current-file-row {
+    margin-top: 10px;
+}
+
+.current-file-label {
+    font-weight: 500;
+    margin-right: 8px;
+}
+
+/* 確認モーダルの最大幅設定 */
+.confirm-modal-max-width {
+    max-width: 420px;
+}
+
+/* 確認モーダルの初期状態（非表示） */
+.confirm-modal-hidden {
+    display: none;
+}
+
+/* GSS画像のスタイル */
+.gs-share-image {
+    max-width: 100%;
+    border: 1px solid #333;
+    margin: 10px 0;
+}

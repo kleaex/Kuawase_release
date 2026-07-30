@@ -1,0 +1,30 @@
+{
+  "id": "kuawase",
+  "name": "kuawase",
+  "displayName": "Kuawase",
+  "description": "Kuawase is a software application that assists in organizing competitions in the Kuawase style by pairing haiku, tanka, or other short-form poems.",
+  "author": "BlackStraySheep",
+  "repository": {
+    "owner": "kleaex",
+    "name": "Kuawase_release"
+  },
+  "appId": "com.blackstraysheep.kuawase",
+  "iconPath": "img/icon.ico",
+  "windowTitlePrefix": "Kuawase",
+  "projectorMode": "plain",
+  "updater": {
+    "provider": "github",
+    "owner": "kleaex",
+    "repo": "Kuawase_release"
+  },
+  "forge": {
+    "executableName": "Kuawase.exe",
+    "shortcutName": "Kuawase",
+    "iconUrl": "https://raw.githubusercontent.com/kleaex/Kuawase_release/main/favicon.ico",
+    "licenseUrl": "https://raw.githubusercontent.com/kleaex/Kuawase_release/main/LICENSE",
+    "publisherRepository": {
+      "owner": "kleaex",
+      "name": "Kuawase_release"
+    }
+  }
+}

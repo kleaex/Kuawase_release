@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>Kuawase - loading</title>
+  <style>
+    body {
+      margin: 0;
+      background: #f5f5f5;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      font-family: "Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;
+    }
+    .logo {
+      font-size: 2.5em;
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 2rem;
+    }
+    .loading {
+      font-size: 1.2em;
+      color: #666;
+      margin-top: 2rem;
+      margin-bottom: 2rem;
+    }
+    .spinner {
+      border: 8px solid #eee;
+      border-top: 8px solid #bdbdbd;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg);}
+      100% { transform: rotate(360deg);}
+    }
+  </style>
+  <link rel="stylesheet" href="css/cmu-serif.css">
+</head>
+<body>
+  <div class="logo" id="Logo">Kuawase</div>
+  <img src="img/icon_deer_white_2-1.png" alt="Kuawase ロゴ" style="height:128px;">
+  <div class="loading" data-lang="onload">読み込み中...</div>
+  <div class="spinner"></div>
+  <div id="version" style="color:#888; margin-top:1.5em; font-size:0.95em;"></div>
+<script>
+window.addEventListener('DOMContentLoaded', () => {
+  if (window.appVersion && window.appVersion.get) {
+    window.appVersion.get().then(version => {
+      document.getElementById('version').textContent = 'v' + version;
+    }).catch(() => {
+      document.getElementById('version').textContent = 'バージョン情報取得不可-1';
+    });
+  } else {
+    document.getElementById('version').textContent = 'バージョン情報取得不可-2';
+  }
+});
+</script>
+<script src="js/lang.js"></script>
+</body>
+</html>

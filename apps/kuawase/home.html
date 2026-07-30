@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>Kuawase</title>
+    <link rel="stylesheet" type="text/css" href="home.css">
+    <link rel="stylesheet" type="text/css" href="home.theme.dark.css">
+    <script src="js/dompurify.js"></script>
+    <script src="js/sanitize.js"></script>
+</head>
+<body>
+    <!-- audioタグ削除 -->
+    <!-- スライド表示領域 -->
+    <div id="slide-preview">
+        <iframe id="slide-frame" src="top.html"></iframe>
+    </div>
+    <!-- 管理パネル --> 
+    <div id="admin-panel">
+        <div id="admin-tabnav" class="admin-tabnav" role="tablist" aria-label="管理パネル タブ" aria-orientation="vertical">
+            <button type="button" id="admin-tab-btn-operate" class="admin-tab-btn" role="tab" aria-selected="false" aria-controls="admin-tab-panel-operate" tabindex="-1" data-tab-target="operate" data-lang="admin-tab-operate">🎌 試合操作・BGM・タイマー</button>
+            <button type="button" id="admin-tab-btn-data" class="admin-tab-btn" role="tab" aria-selected="false" aria-controls="admin-tab-panel-data" tabindex="-1" data-tab-target="data" data-lang="admin-tab-data">🗂 データ管理</button>
+            <button type="button" id="admin-tab-btn-display" class="admin-tab-btn" role="tab" aria-selected="false" aria-controls="admin-tab-panel-display" tabindex="-1" data-tab-target="display" data-lang="admin-tab-display">⚙ 表示設定</button>
+        </div>
+        <div id="admin-tab-panel-operate" class="admin-tab-panel" data-tab-panel="operate" role="tabpanel" aria-labelledby="admin-tab-btn-operate" tabindex="0">
+        <div class="section-heading" data-lang="change-match">対戦切り替え</div>
+        <div id="page-controls">
+            <button onclick="changeIframeSrc('top.html')" data-lang="pc-competop">大会TOP</button>
+            <button onclick="changeIframeSrc('index.html')" data-lang="pc0">試合TOP</button>
+            <br>
+            <button onclick="changeIframeSrc('1.html')" data-lang="pc1">先鋒戦</button>
+            <button onclick="changeIframeSrc('2.html')" data-lang="pc2">次鋒戦</button>
+            <button onclick="changeIframeSrc('3.html')" data-lang="pc3">中堅戦</button>
+            <button onclick="changeIframeSrc('4.html')" data-lang="pc4">副将戦</button>
+            <button onclick="changeIframeSrc('5.html')" data-lang="pc5">大将戦</button>
+        </div>
+        <div id="hikou-panel">
+            <div class="section-heading" data-lang="hikou">披講</div>
+            <div id="hikou">
+                <button id="showRed" data-lang="hikou-red">紅 披講</button>
+                <button id="showWhite" data-lang="hikou-white">白 披講</button>
+            </div>
+        </div>
+        <div class="section-heading" data-lang="bgmstart">BGM再生</div>
+        <div id="audio-controls">
+            <button type="button" class="btn" onclick="audio_in()" data-lang="bgm-in">入場</button>
+            <button type="button" class="btn" onclick="audio_out()" data-lang="bgm-out">退場</button>
+            <button type="button" class="btn" onclick="audio_wait()" data-lang="bgm-wait">待機</button>
+            <button id="stop-bgm-btn" data-lang="bgm-stop">停止</button>
+            <label>
+                <input type="checkbox" id="toggle-wait-loop-checkbox"><span data-lang="wait-loop">待機ループ</span>
+            </label>
+        </div>
+        <div id="timer-controls">
+            <details open>
+            <summary data-lang="timer">タイマー</summary>
+            <div class="timers-container">
+                <!-- 1つ目のタイマー -->
+                <div class="timer-block">
+                <div>
+                    <input type="number" id="minutes" min="0" value="3" title="上タイマー 分" aria-label="上タイマー 分"><span data-lang="min">分</span>
+                    <input type="number" id="seconds" min="0" max="59" value="00" title="上タイマー 秒" aria-label="上タイマー 秒"><span data-lang="sec">秒</span>
+                    <button onclick="saveTimeSetting()" data-lang="save">保存</button>
+                </div>
+                <div id="timer">
+                    <span id="timer1min">03</span><span data-lang="min" class="unit">分</span><span id="timer1sec">00</span><span data-lang="sec" class="unit">秒</span>
+                </div>
+                <div>
+                    <button onclick="startTimer()" data-lang="start">スタート</button>
+                    <button onclick="pauseTimer()" data-lang="pause">一時停止</button>
+                    <button onclick="resetTimer()" data-lang="reset">リセット</button>
+                </div>
+                <div id="one-minute-warning"></div>
+                </div>
+
+                <!-- 2つ目のタイマー -->
+                <div class="timer-block">
+                <div>
+                    <input type="number" id="seconds2" min="0" max="59" value="30" title="下タイマー 秒" aria-label="下タイマー 秒"><span data-lang="sec" >秒</span>
+                    <button onclick="saveTimeSetting2()" data-lang="save">保存</button>
+                </div>
+                <div id="timer2">
+                    <span id="timer2sec">30</span><span data-lang="sec" class="unit">秒</span>
+                </div>
+                <div>
+                    <button onclick="startTimer2()" data-lang="start">スタート</button>
+                    <button onclick="pauseTimer2()" data-lang="pause">一時停止</button>
+                    <button onclick="resetTimer2()" data-lang="reset">リセット</button>
+                </div>
+                </div>
+            </div>
+            </details>
+            </div>
+        </div>
+        <div id="admin-tab-panel-data" class="admin-tab-panel" data-tab-panel="data" role="tabpanel" aria-labelledby="admin-tab-btn-data" tabindex="0">
+            <details>
+                <summary data-lang="ku-data">句データ管理</summary>
+                <div class="file-manager">
+                    <div class="flex-row button-group">
+                        <button type="button" id="excel-select-btn" class="custom-file-label" data-lang="excel-select">Excelファイル選択</button>
+                        <input type="file" id="excel-input" accept=".xlsx" class="hide">
+                        <button id="open-gs-modal-btn" class="custom-file-label" data-lang="gs-load-btn">Googleスプレッドシート読み込み</button>
+                        <div class="right-buttons">
+                            <button id="reset-excel-only-btn" data-lang="excel-only-reset">句データリセット</button>
+                        </div>
+                    </div>
+                    <div class="flex-row current-file-row">
+                        <span data-lang="current-file" class="current-file-label">読み込み元：</span>
+                        <span id="last-excel-file" class="last-excel-file" data-lang="not-selected">選択されていません</span>
+                    </div>
+                </div>
+            </details>
+            <details>
+                <summary data-lang="bgmcheck">BGMファイル管理</summary>
+                <div class="file-manager">
+                    <div class="flex-row">
+                        <button type="button" onclick="document.getElementById('music-upload-input').click()" class="custom-file-label" data-lang="bgm-select">BGMファイル選択</button>
+                        <input type="file" id="music-upload-input" multiple accept="audio/*" class="hide">
+                        <div class="right-buttons">
+                            <button id="delete-all-music-btn" data-lang="bgm-delete-all">一括削除</button>
+                        </div>
+                    </div>
+                    <div class="file-list-wrapper">
+                        <span data-lang="bgm-file-list">ユーザーBGMファイル一覧</span>
+                        <ul id="music-file-list"></ul>
+                    </div>
+                    <div class="bgm-selects-vertical">
+                        <label>
+                            <span data-lang="bgm-up-hikou">披講：</span>
+                            <select id="bgm-hikou"></select>
+                        </label>
+                        <label>
+                            <span data-lang="bgm-up-in">入場：</span>
+                            <select id="bgm-in"></select>
+                        </label>
+                        <label>
+                            <span data-lang="bgm-up-out">退場：</span>
+                            <select id="bgm-out"></select>
+                        </label>
+                        <label>
+                            <span data-lang="bgm-up-wait">待機：</span>
+                            <select id="bgm-wait"></select>
+                        </label>
+                        <label>
+                            <span data-lang="bgm-up-timer1">上タイマー：</span>
+                            <select id="bgm-timer1"></select>
+                        </label>
+                        <label>
+                            <span data-lang="bgm-up-timer2">下タイマー：</span>
+                            <select id="bgm-timer2"></select>
+                        </label>
+                    </div>
+                    <div class="bgm-save-row">
+                        <button id="save-bgm-config" data-lang="bgm-save">BGM設定保存</button>
+                    </div>
+                </div>
+            </details>
+        </div>
+        <div id="admin-tab-panel-display" class="admin-tab-panel" data-tab-panel="display" role="tabpanel" aria-labelledby="admin-tab-btn-display" tabindex="0">
+            <details>
+                <summary data-lang="settings">表示設定・その他</summary>
+                <div class="file-manager settings-block">
+                    <div>
+                        <label for="theme-select" data-lang="color-setting">テーマカラー</label>
+                        <select id="theme-select">
+                        </select>
+                    </div>
+                    <div>
+                        <label for="css-select" data-lang="css-theme" class="css-theme-label">対戦デザイン(CSS)</label>
+                        <div class="css-select-line">
+                            <select id="css-select">
+                                <option value="battle.css" data-lang="css-base">標準</option>
+                                <option value="battle.theme.dark.css" data-lang="css-dark">ダーク</option>
+                                <option value="battle.theme.washi.css" data-lang="css-washi">和紙</option>
+                                <option value="battle.theme.neo.css" data-lang="css-neo">ネオ</option>
+                            </select>
+                            <button type="button" id="add-custom-css-btn" data-lang="add-custom-css">カスタムCSS追加</button>
+                            <input type="file" id="custom-css-input" accept=".css" class="hide">
+                        </div>
+                        <div id="user-css-list-wrapper" class="file-list-wrapper">
+                            <span data-lang="custom-css-list-title">ユーザーCSS一覧</span>
+                            <ul id="user-css-file-list" class="file-list"></ul>
+                        </div>
+                    </div>
+                    <div>
+                        <label data-lang="lang-setting">言語</label>
+                        <button onclick="setLanguage('ja')">日本語</button>
+                        <button onclick="setLanguage('en')">English</button>
+                    </div>
+                    <div>
+                        <label for="home-darkmode-toggle" data-lang="home-dark-mode">管理画面ダークモード</label>
+                        <input type="checkbox" id="home-darkmode-toggle" />
+                    </div>
+                    <div>
+                        <label for="admin-tabnav-toggle" data-lang="admin-tabnav-toggle">管理パネル タブ表示（試験導入）</label>
+                        <input type="checkbox" id="admin-tabnav-toggle" />
+                    </div>
+                    <div>
+                        <label for="reset-data-btn" data-lang="reset-all">全データ初期化</label>
+                        <button id="reset-data-btn" data-lang="excel-reset">初期化</button>
+                    </div>
+                </div>
+            </details>
+        </div>
+        </div>
+        <div id="match-setup-panel">
+            <h3 data-lang="battle-decide">試合指定パネル</h3>
+            <div class="match-setup-flex">
+                <div class="match-setup-fields">
+                    <div class="match-setup-panel-row">
+                        <label><span data-lang="bd-red">紅チーム</span>
+                            <select id="redTeamSelect"></select>
+                        </label>
+                        <label><span data-lang="bd-white">白チーム</span>
+                            <select id="whiteTeamSelect"></select>
+                        </label>
+                    </div>
+                    <div class="match-setup-panel-row">
+                        <label><span data-lang="theme">兼題</span>
+                            <select id="kendaiSelect"></select>
+                        </label>
+                        <label><span data-lang="match-name">試合名</span>
+                            <input type="text" id="matchTitleInput" data-lang-placeholder="match-name-placeholder">
+                        </label>
+                    </div>
+                </div>
+                <button id="saveMatchConfig" data-lang="save">保存</button>
+            </div>
+        </div>
+    <script src="js/lang.js"></script>
+    <script src="js/admin-tabnav.js"></script>
+    <script src="home.js"></script>
+    <script src="js/color.js"></script>
+    <script src="js/toast-runtime.browser.js"></script>
+    <script src="js/unsaved-panels.js"></script>
+    <script src="js/timer.js"></script>
+    <script src="js/css-theme-runtime.js"></script>
+    <script src="js/css-theme.js"></script>
+    <script src="js/custom-css-bridge.js"></script>
+    <script src="js/match-helpers.js"></script>
+    <script src="js/battle-page-ui.js"></script>
+    <script defer src="src/renderer.entry.js"></script>
+    <script src="js/bgm-manager-bridge.js"></script>
+    <script src="js/music.js"></script>
+    <div id="toast"></div>
+    <div id="gs-modal" class="modal">
+        <div class="modal-content app-modal-content">
+            <span class="close-btn">&times;</span>
+            <h3 data-lang="gs-modal-title">Googleスプレッドシートから読み込み</h3>
+            <p data-lang="gs-modal-desc1">
+                読み込みたいGoogleスプレッドシートを開き、右上の「共有」ボタンをクリックしてください。
+            </p>
+            <p data-lang="gs-modal-desc2">
+                「一般的なアクセス」を「リンクを知っている全員」に変更し、権限が「閲覧者」になっていることを確認してください。
+            </p>
+            <p data-lang="gs-modal-desc3">
+                その後、「リンクをコピー」して、下の入力欄に貼り付けてください。
+            </p>
+            <div class="flex-row gs-input-row">
+                <input type="text" id="gs-url-input" class="url-input gs-url-input-flex" title="GoogleスプレッドシートURL" aria-label="GoogleスプレッドシートURL" placeholder="https://docs.google.com/spreadsheets/d/...">
+                <button id="load-gs-btn" data-lang="gs-load">読み込み</button>
+            </div>
+        </div>
+    </div>
+    <div id="confirm-modal" class="modal confirm-modal-hidden">
+      <div class="modal-content app-modal-content confirm-modal-max-width">
+        <h3 id="confirm-modal-title" data-lang="confirm-title">確認</h3>
+        <p id="confirm-modal-message"></p>
+        <div class="confirm-actions">
+          <button id="confirm-ok-btn" data-lang="ok">OK</button>
+          <button id="confirm-cancel-btn" data-lang="cancel">キャンセル</button>
+        </div>
+      </div>
+    </div>
+</body>
+</html>
+

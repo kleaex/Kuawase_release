@@ -1,0 +1,18 @@
+{
+  "redHaiku": "",
+  "whiteHaiku": "",
+  "redTeam": "",
+  "whiteTeam": "",
+  "kendai": "",
+  "matchTitle": "",
+  "bgm": {
+    "hikou": "",
+    "in": "",
+    "out": "",
+    "wait": "",
+    "timer1": "",
+    "timer2": ""
+  },
+  "lastExcelFile": "",
+  "haikuFont": "serif"
+}

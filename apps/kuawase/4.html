@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title id="page-title"></title>
+    <link rel="icon" href="favicon.ico" />
+    <link id="active-style" rel="stylesheet" href="css/battle.css" />
+    <link rel="stylesheet" href="css/cmu-serif.css" />
+    <style>
+      .compe-logo-wrap {
+        position: absolute;
+        right: 0.6rem;
+        top: 50%;
+        transform: translateY(-50%);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        opacity: 0.25;
+        pointer-events: none;
+      }
+    </style>
+    <script src="js/dompurify.js"></script>
+    <script src="js/sanitize.js"></script>
+  </head>
+
+  <body>
+    <h1 class="compe-title">
+      <span id="Compe-name"></span>
+      <span class="compe-logo-wrap" aria-hidden="true">
+        <span class="compe-logo-stack">
+          <span class="compe-logo-powered">powered by</span>
+          <span class="compe-logo">Kuawase</span>
+        </span>
+      </span>
+    </h1>
+    <section class="battle-root">
+      <div class="battle-layout">
+        <div class="poem-panel poem-panel--red">
+          <h4 data-lang="red">紅</h4>
+          <div class="haiku-container">
+            <div id="redHaiku" class="haiku-text"><!--紅　句内容--></div>
+          </div>
+        </div>
+        <div class="match-panel">
+          <h2>
+            <div id="gameid"><!-- Ａブロック 第１試合 など --></div>
+          </h2>
+          <h2>
+            <span data-lang="theme">兼題</span><br />
+            <div id="kendai"><!-- 兼題 --></div>
+          </h2>
+          <h3>
+            <div id="matchid" data-lang="pc4">副将戦</div>
+          </h3>
+          <div class="team-slots">
+            <div class="team-slot team-slot--red">
+              <div id="redTeam" class="team-name"><!-- 紅 チーム名 --></div>
+            </div>
+            <div class="team-slot team-slot--white">
+              <div id="whiteTeam" class="team-name"><!-- 白 チーム名 --></div>
+            </div>
+          </div>
+        </div>
+        <div class="poem-panel poem-panel--white">
+          <h4 data-lang="white">白</h4>
+          <div class="haiku-container">
+            <div id="whiteHaiku" class="haiku-text"><!--白　句内容--></div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <div id="admin-view-layout" class="home-iframe-only">
+      <div class="admin-header-card">
+        <div class="admin-title">
+          <span id="m-Compe-name"></span>
+        </div>
+        <div class="admin-match-info">
+          <div class="admin-row-1">
+            <span id="m-gameid"></span>
+            <span id="m-matchid"></span>
+          </div>
+          <div class="admin-row-2">
+            <span id="m-kendai"></span>
+          </div>
+        </div>
+      </div>
+      <div class="admin-team-red">
+        <span class="team-label">紅</span>
+        <span id="m-redTeam" class="team-val"></span>
+        <span class="score-placeholder">　</span>
+      </div>
+      <div class="admin-team-white">
+        <span class="team-label">白</span>
+        <span id="m-whiteTeam" class="team-val"></span>
+        <span class="score-placeholder">　</span>
+      </div>
+    </div>
+
+    <!-- Javascript Data Mirroring for Admin View -->
+    <script src="js/admin-mirror.js"></script>
+
+    <!-- JavaScript -->
+    <script src="js/common-theme.js"></script>
+    <script src="js/css-theme-runtime.js"></script>
+    <script defer src="js/battle.js"></script>
+    <script src="js/color.js"></script>
+    <script src="js/lang.js"></script>
+  </body>
+</html>

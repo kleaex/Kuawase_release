@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title id="page-title"></title>
+    <link rel="icon" href="favicon.ico" />
+    <link id="active-style" rel="stylesheet" href="css/battle.css" />
+    <link rel="stylesheet" href="css/cmu-serif.css" />
+    <style>
+      .compe-logo-wrap {
+        position: absolute;
+        right: 0.6rem;
+        top: 50%;
+        transform: translateY(-50%);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        opacity: 0.25;
+        pointer-events: none;
+      }
+    </style>
+  </head>
+  <body>
+    <h1 class="compe-title">
+      <span id="Compe-name"></span>
+      <span class="compe-logo-wrap" aria-hidden="true">
+        <span class="compe-logo-stack">
+          <span class="compe-logo-powered">powered by</span>
+          <span class="compe-logo">Kuawase</span>
+        </span>
+      </span>
+    </h1>
+    <!-- JavaScript -->
+    <script src="js/common-theme.js"></script>
+    <script src="js/css-theme-runtime.js"></script>
+    <script defer src="src/top.prototype.js"></script>
+    <script src="js/color.js"></script>
+  </body>
+</html>
