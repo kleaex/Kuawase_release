@@ -1,9 +1,9 @@
 {
   "name": "@kuawase/app-kuawase",
   "private": true,
-  "version": "0.14.1",
+  "version": "1.0.0",
   "description": "Workspace app shell for Kuawase.",
-  "author": "BlackStraySheep",
+  "author": "KLEA ITDD",
   "type": "commonjs",
   "main": "src/main.js",
   "config": {

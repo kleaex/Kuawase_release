@@ -20,7 +20,7 @@
   "forge": {
     "executableName": "Kuawase.exe",
     "shortcutName": "Kuawase",
-    "iconUrl": "https://raw.githubusercontent.com/kleaex/Kuawase_release/main/favicon.ico",
+    "iconUrl": "https://raw.githubusercontent.com/kleaex/Kuawase_release/main/img/icon.ico",
     "licenseUrl": "https://raw.githubusercontent.com/kleaex/Kuawase_release/main/LICENSE",
     "publisherRepository": {
       "owner": "kleaex",
