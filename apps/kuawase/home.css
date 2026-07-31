@@ -24,25 +24,28 @@ button, select, input{
 #slide-preview {
     grid-column: 1 / 2;
     grid-row: 1 / 2;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    position: relative;
     overflow: hidden;
     background-color: #f0f0f0;
     border: 1px solid var(--grey);
+    container-type: size;
 }
 
+/* 基準解像度(1920x1080)に固定した上でtransform:scaleで表示領域に合わせる。
+   admin-tabnav-mode時の #slide-frame（admin-tabnav.css）と同じ考え方。 */
 #slide-frame {
-    width: 100%;
-    height: 100%;
-    max-width: 100%;
-    max-height: 100%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: var(--tn-preview-w, 1920px);
+    height: var(--tn-preview-h, 1080px);
+    max-width: none;
+    max-height: none;
+    margin: 0;
     border: 1px solid var(--grey);
     box-sizing: border-box;
-    transform-origin: center;
-        /* スケーリング時の余白調整 */
-    margin: auto;
-    display: block;
+    transform-origin: center center;
+    transform: translate(-50%, -50%) scale(min(calc(100cqw / var(--tn-preview-w, 1920px)), calc(100cqh / var(--tn-preview-h, 1080px))));
 }
 
 #admin-panel {
